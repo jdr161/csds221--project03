@@ -1,8 +1,10 @@
 import logo from '../logo.svg';
 import '../App.css';
-
+import { Navigate  } from "react-router-dom";
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
+
+
 
 const Homepage = () => {
   return (
@@ -13,10 +15,9 @@ const Homepage = () => {
             This is the Homepage
         </p>
         <Authenticator>
-          {({ signOut, user }) => (
+          {() => (
             <main>
-              <h1>Hello {user.username}</h1>
-              <button onClick={signOut}>Sign out</button>
+              {/*<Navigate to="/dashboard" /> */}
             </main>
           )}
         </Authenticator>
