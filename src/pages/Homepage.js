@@ -17,7 +17,7 @@ const Homepage = () => {
         <Authenticator>
           {() => (
             <main>
-              {/*<Navigate to="/dashboard" /> */}
+              <Navigate to="/dashboard" />
             </main>
           )}
         </Authenticator>

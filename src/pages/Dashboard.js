@@ -20,9 +20,13 @@ class Dashboard extends Component {
             })
         .catch(err => console.log(err));
     }
-    handleSignoutClick = () => {
-        this.setState({navToHomepageBool: true});
-        //log out of AWS Auth
+    handleSignoutClick = async () => {
+        try {
+            await Auth.signOut();
+            this.setState({navToHomepageBool: true});
+        } catch (error) {
+            console.log('error signing out: ', error);
+        }
     }
 
     render() {
