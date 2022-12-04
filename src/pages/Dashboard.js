@@ -4,6 +4,7 @@ import { Auth, API } from 'aws-amplify';
 import * as queries from '../graphql/queries';
 import * as mutations from '../graphql/mutations';
 import Navbar from "../components/Navbar";
+import moment from "moment/moment";
 
 
 class Dashboard extends Component {
@@ -77,11 +78,26 @@ class Dashboard extends Component {
                         </div>
                     </div>
                 </nav>
-                <div>
-                    Welcome to the dashboard
-                </div>
-                <div>
-                    {this.state.posts.map(post => (<p key={post.id}>{post.content}</p>))} 
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-3" />
+                        <div className="col-lg-6">
+                        {this.state.posts.map(post => (
+                            <div className="card mt-3">
+                            <div className="card-header">
+                            {post.username}
+                            <div className='d-flex'>
+                                {moment(post.createdAt).format('MMMM Do YYYY, h:mm a')}
+                            </div>
+                            </div>
+                            <div className="card-body" key={post.id}>
+                                {post.content}
+                            </div>
+                        </div>
+                        ))} 
+                        </div>
+                        <div className="col-lg-3" />
+                    </div>
                 </div>
 
                 {/* Create New Post Modal */}
