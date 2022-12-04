@@ -8,6 +8,8 @@ import NoPage from './pages/Nopage';
 import Dashboard from './pages/Dashboard';
 import { Amplify, Auth, API, graphqlOperation } from 'aws-amplify';
 import awsconfig from './aws-exports';
+import bootstrap from 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 Amplify.configure(awsconfig);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
