@@ -6,6 +6,7 @@ export const getPost = /* GraphQL */ `
     getPost(id: $id) {
       id
       username
+      type
       createdAt
       content
       updatedAt
@@ -22,6 +23,36 @@ export const listPosts = /* GraphQL */ `
       items {
         id
         username
+        type
+        createdAt
+        content
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const postsByDate = /* GraphQL */ `
+  query PostsByDate(
+    $type: String!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPostFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    postsByDate(
+      type: $type
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        username
+        type
         createdAt
         content
         updatedAt

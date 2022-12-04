@@ -9,6 +9,7 @@ export const createPost = /* GraphQL */ `
     createPost(input: $input, condition: $condition) {
       id
       username
+      type
       createdAt
       content
       updatedAt
@@ -23,6 +24,7 @@ export const updatePost = /* GraphQL */ `
     updatePost(input: $input, condition: $condition) {
       id
       username
+      type
       createdAt
       content
       updatedAt
@@ -37,6 +39,7 @@ export const deletePost = /* GraphQL */ `
     deletePost(input: $input, condition: $condition) {
       id
       username
+      type
       createdAt
       content
       updatedAt

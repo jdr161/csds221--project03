@@ -5,6 +5,7 @@ input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONL
 type Post @model {
   id: ID!
   username: String
+  type: String! @index(name: "postsByDate", queryField: "postsByDate", sortKeyFields: ["createdAt"])
   createdAt: AWSDateTime
   content: String
 }

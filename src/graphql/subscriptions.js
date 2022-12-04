@@ -6,6 +6,7 @@ export const onCreatePost = /* GraphQL */ `
     onCreatePost(filter: $filter) {
       id
       username
+      type
       createdAt
       content
       updatedAt
@@ -17,6 +18,7 @@ export const onUpdatePost = /* GraphQL */ `
     onUpdatePost(filter: $filter) {
       id
       username
+      type
       createdAt
       content
       updatedAt
@@ -28,6 +30,7 @@ export const onDeletePost = /* GraphQL */ `
     onDeletePost(filter: $filter) {
       id
       username
+      type
       createdAt
       content
       updatedAt

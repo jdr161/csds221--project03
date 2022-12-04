@@ -35,9 +35,9 @@ class Dashboard extends Component {
     }
     getPosts = async () => {
         // Simple query
-        const allPosts = await API.graphql({ query: queries.listPosts });
+        const allPosts = await API.graphql({ query: queries.postsByDate, variables: {type: "Post", sortDirection: "DESC"} });
         console.log(allPosts); // result: { "data": { "listTodos": { "items": [/* ..... */] } } }
-        this.setState({posts: allPosts.data.listPosts.items});
+        this.setState({posts: allPosts.data.postsByDate.items});
     }
     getUser = async () => {
         const { attributes } = await Auth.currentAuthenticatedUser();
@@ -55,7 +55,8 @@ class Dashboard extends Component {
         console.log("reached");
         const postDetails = {
             username: this.state.userAttributes.preferred_username,
-            content: this.state.newPostContent
+            content: this.state.newPostContent,
+            type: "Post" //This is necessary for sorting b/c aws AppSync is strange
         };
         console.log(postDetails);
         await API.graphql({ query: mutations.createPost, variables: {input: postDetails}});
@@ -83,14 +84,14 @@ class Dashboard extends Component {
                         <div className="col-lg-3" />
                         <div className="col-lg-6">
                         {this.state.posts.map(post => (
-                            <div className="card mt-3">
+                            <div className="card mt-3" key={post.id}>
                             <div className="card-header">
                             {post.username}
                             <div className='d-flex'>
                                 {moment(post.createdAt).format('MMMM Do YYYY, h:mm a')}
                             </div>
                             </div>
-                            <div className="card-body" key={post.id}>
+                            <div className="card-body">
                                 {post.content}
                             </div>
                         </div>
