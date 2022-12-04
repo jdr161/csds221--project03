@@ -1,14 +1,17 @@
-import logo from '../logo.svg';
-import '../App.css';
 import { Navigate  } from "react-router-dom";
 import { Component } from 'react';
-import { Auth } from 'aws-amplify';
+import { Auth, API } from 'aws-amplify';
+import * as queries from '../graphql/queries';
+import * as mutations from '../graphql/mutations';
+import * as subscriptions from '../graphql/subscriptions';
 
 class Dashboard extends Component {
     constructor() {
         super();
         this.state = {
-            navToHomepageBool: false
+            navToHomepageBool: false,
+            username: "",
+            posts: []
         };
         Auth.currentAuthenticatedUser({
             bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
@@ -19,6 +22,13 @@ class Dashboard extends Component {
             })
             })
         .catch(err => console.log(err));
+        this.getPosts();
+    }
+    getPosts = async () => {
+        // Simple query
+        const allPosts = await API.graphql({ query: queries.listPosts });
+        console.log(allPosts); // result: { "data": { "listTodos": { "items": [/* ..... */] } } }
+        this.setState({posts: allPosts.data.listPosts.items});
     }
     handleSignoutClick = async () => {
         try {
@@ -31,19 +41,17 @@ class Dashboard extends Component {
 
     render() {
         return (
-            <div className="App">
-                <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Hello {this.state.username}
-                    <button onClick={this.handleSignoutClick}>Sign out</button>
-                    This is the Dashboard
-                </p>
-                </header>
-                { this.state.navToHomepageBool &&
-                    <Navigate to="../" />
-                }
-            </div>
+            <>
+                <div>
+                    Welcome to the dashboard
+                </div>
+                <div>
+                    {this.state.posts.map(post => (<p key={post.id}>{post.content}</p>))} 
+                </div>
+            { this.state.navToHomepageBool &&
+                <Navigate to="../" />
+            }
+            </>
         )
     }
 }

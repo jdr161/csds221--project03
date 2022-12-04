@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from './pages/Homepage';
 import NoPage from './pages/Nopage';
 import Dashboard from './pages/Dashboard';
-import { Amplify, Auth } from 'aws-amplify';
+import { Amplify, Auth, API, graphqlOperation } from 'aws-amplify';
 import awsconfig from './aws-exports';
 Amplify.configure(awsconfig);
 
