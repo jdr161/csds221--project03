@@ -64,6 +64,13 @@ class Dashboard extends Component {
     handleChange = (event) => {
         this.setState({newPostContent: event.target.value});
       }
+    handleDeletePost = async (id) => {
+        const postDetails = {
+            id: id,
+        };
+        const deletedPost = await API.graphql({ query: mutations.deletePost, variables: {input: postDetails}});
+        this.getPosts();
+    }
 
     render() {
         return (
@@ -86,10 +93,23 @@ class Dashboard extends Component {
                         {this.state.posts.map(post => (
                             <div className="card mt-3" key={post.id}>
                             <div className="card-header">
-                            {post.username}
-                            <div className='d-flex'>
-                                {moment(post.createdAt).format('MMMM Do YYYY, h:mm a')}
+                            <div className="container">
+                            <div className="row">
+                                <div className="col-lg-8">
+                                    {post.username}
+                                    <div className='d-flex'>
+                                        {moment(post.createdAt).format('MMMM Do YYYY, h:mm a')}
+                                    </div>
+                                </div>
+                                <div className="col-lg-4">
+                                    { this.state.userAttributes.preferred_username == post.username &&
+                                    <button className="btn btn-danger" onClick={() => this.handleDeletePost(post.id)}>delete</button>
+                                    }
+                                </div>
                             </div>
+                            </div>
+                            
+                            
                             </div>
                             <div className="card-body">
                                 {post.content}
