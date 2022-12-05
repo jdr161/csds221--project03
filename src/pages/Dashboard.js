@@ -54,13 +54,17 @@ class Dashboard extends Component {
         }
     }
     handleCreateNewPost = async () => {
-        const postDetails = {
-            username: this.state.userAttributes.preferred_username,
-            content: this.state.newPostContent,
-            type: "Post" //This is necessary for sorting with AppSync
-        };
-        console.log(postDetails);
-        await API.graphql({ query: mutations.createPost, variables: {input: postDetails}}).then(toast.success("Post successfully created!"));
+        if(this.state.newPostContent !== ""){
+            const postDetails = {
+                username: this.state.userAttributes.preferred_username,
+                content: this.state.newPostContent,
+                type: "Post" //This is necessary for sorting with AppSync
+            };
+            console.log(postDetails);
+            await API.graphql({ query: mutations.createPost, variables: {input: postDetails}}).then(toast.success("Post successfully created!"));
+        } else {
+            toast.error("Posts cannot be empty");
+        }
     }
     handleChange = (event) => {
         this.setState({newPostContent: event.target.value});
@@ -150,26 +154,26 @@ class Dashboard extends Component {
                 {/* Create New Post Modal */}
                 <div className="modal fade" id="newPostModal" tabIndex="-1" aria-labelledby="newPostModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-lg">
-                <form onSubmit={this.handleCreateNewPost}>
+                
                     <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title" id="newPostModalHeader">New Post</h5>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
-                        
+                    <form id="newPostForm" onSubmit={this.handleCreateNewPost}>
                         <div className="mb-3">
                             <label htmlFor="postText" className="form-label">Say Something...</label>
                             <input type="text" value={this.state.newPostContent} onChange={this.handleChange} className="form-control" id="newPostText"/>
                         </div>
-                        
+                    </form>
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" className="btn btn-primary">Post</button>
+                        <button type="submit" form="newPostForm" className="btn btn-primary">Post</button>
                     </div>
                     </div>
-                </form>
+                
                 </div>
                 </div>
                 {/* Update Post Modal */}
