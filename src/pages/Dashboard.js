@@ -4,6 +4,7 @@ import { Auth, API } from 'aws-amplify';
 import * as queries from '../graphql/queries';
 import * as mutations from '../graphql/mutations';
 import moment from "moment/moment";
+import toast, { Toaster } from 'react-hot-toast';
 
 
 class Dashboard extends Component {
@@ -59,7 +60,7 @@ class Dashboard extends Component {
             type: "Post" //This is necessary for sorting with AppSync
         };
         console.log(postDetails);
-        await API.graphql({ query: mutations.createPost, variables: {input: postDetails}});
+        await API.graphql({ query: mutations.createPost, variables: {input: postDetails}}).then(toast.success("Post successfully created!"));
     }
     handleChange = (event) => {
         this.setState({newPostContent: event.target.value});
@@ -70,6 +71,7 @@ class Dashboard extends Component {
         };
         const deletedPost = await API.graphql({ query: mutations.deletePost, variables: {input: postDetails}});
         this.getPosts();
+        toast.success("Post successfully deleted!");
     }
     handleUpdatePost = async () => {
         const postDetails = {
@@ -79,7 +81,7 @@ class Dashboard extends Component {
             type: "Post" //This is necessary for sorting with AppSync
         };
         console.log(postDetails);
-        await API.graphql({ query: mutations.updatePost, variables: {input: postDetails}});
+        await API.graphql({ query: mutations.updatePost, variables: {input: postDetails}}).then(toast.success("Post successfully updated!"));
     }
     handleEditChange = (event) => {
         this.setState({updatedPostContent: event.target.value});
@@ -92,6 +94,10 @@ class Dashboard extends Component {
     render() {
         return (
             <>
+                <Toaster
+                position="bottom-right"
+                reverseOrder={false}
+                />
                 <nav className="navbar navbar-light bg-light">
                 <div className="container-fluid">
                     Welcome back {this.state.userAttributes.preferred_username}!
