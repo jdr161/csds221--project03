@@ -3,7 +3,6 @@ import { Component } from 'react';
 import { Auth, API } from 'aws-amplify';
 import * as queries from '../graphql/queries';
 import * as mutations from '../graphql/mutations';
-import Navbar from "../components/Navbar";
 import moment from "moment/moment";
 
 
