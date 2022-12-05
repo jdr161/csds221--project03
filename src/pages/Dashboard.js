@@ -74,16 +74,17 @@ class Dashboard extends Component {
     render() {
         return (
             <>
-                <nav className='navbar navbar-expand-lg navbar-light bg-light'>
-                    <div className='container-fluid'>
-                        <span className="navbar-text">
-                            Welcome back {this.state.userAttributes.preferred_username}!
-                        </span>
-                        <div className='d-flex'>
-                            <button className='btn btn-outline-primary' data-bs-toggle="modal" data-bs-target="#newPostModal">New Post</button>
-                            <button className='btn btn-outline-danger' onClick={this.handleSignoutClick}>Logout</button>
-                        </div>
+                <nav class="navbar navbar-light bg-light">
+                <div class="container-fluid">
+                    Welcome back {this.state.userAttributes.preferred_username}!
+                    <div className="d-flex">
+                        <span class="navbar-brand h1">Project 03: Posting App</span>
                     </div>
+                    <div className='d-flex'>
+                        <button className='btn btn-outline-primary' data-bs-toggle="modal" data-bs-target="#newPostModal">New Post</button>
+                        <button className='btn btn-outline-danger' onClick={this.handleSignoutClick}>Logout</button>
+                    </div>
+                </div>
                 </nav>
                 <div className="container">
                     <div className="row">
@@ -102,7 +103,7 @@ class Dashboard extends Component {
                                 </div>
                                 <div className="col-lg-4">
                                     { this.state.userAttributes.preferred_username == post.username &&
-                                    <button className="btn btn-danger" onClick={() => this.handleDeletePost(post.id)}>delete</button>
+                                    <button className="btn btn-danger btn-sm float-end" onClick={() => this.handleDeletePost(post.id)}>delete</button>
                                     }
                                 </div>
                             </div>
