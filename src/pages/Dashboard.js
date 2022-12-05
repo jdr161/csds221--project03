@@ -18,7 +18,9 @@ class Dashboard extends Component {
                 sub: ""
             },
             posts: [],
-            newPostContent: ""
+            newPostContent: "",
+            updatedPostContent: "",
+            postToUpdateId: "",
         };
         Auth.currentAuthenticatedUser({
             bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
@@ -51,11 +53,10 @@ class Dashboard extends Component {
         }
     }
     handleCreateNewPost = async () => {
-        console.log("reached");
         const postDetails = {
             username: this.state.userAttributes.preferred_username,
             content: this.state.newPostContent,
-            type: "Post" //This is necessary for sorting b/c aws AppSync is strange
+            type: "Post" //This is necessary for sorting with AppSync
         };
         console.log(postDetails);
         await API.graphql({ query: mutations.createPost, variables: {input: postDetails}});
@@ -70,15 +71,32 @@ class Dashboard extends Component {
         const deletedPost = await API.graphql({ query: mutations.deletePost, variables: {input: postDetails}});
         this.getPosts();
     }
+    handleUpdatePost = async () => {
+        const postDetails = {
+            id: this.state.postToUpdateId,
+            username: this.state.userAttributes.preferred_username,
+            content: this.state.updatedPostContent,
+            type: "Post" //This is necessary for sorting with AppSync
+        };
+        console.log(postDetails);
+        await API.graphql({ query: mutations.updatePost, variables: {input: postDetails}});
+    }
+    handleEditChange = (event) => {
+        this.setState({updatedPostContent: event.target.value});
+    }
+    setPostToUpdate = (id, content) => {
+        this.setState({postToUpdateId: id});
+        this.setState({updatedPostContent: content});
+    }
 
     render() {
         return (
             <>
-                <nav class="navbar navbar-light bg-light">
-                <div class="container-fluid">
+                <nav className="navbar navbar-light bg-light">
+                <div className="container-fluid">
                     Welcome back {this.state.userAttributes.preferred_username}!
                     <div className="d-flex">
-                        <span class="navbar-brand h1">Project 03: Posting App</span>
+                        <span className="navbar-brand h1">Project 03: Posting App</span>
                     </div>
                     <div className='d-flex'>
                         <button className='btn btn-outline-primary' data-bs-toggle="modal" data-bs-target="#newPostModal">New Post</button>
@@ -102,8 +120,10 @@ class Dashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="col-lg-4">
-                                    { this.state.userAttributes.preferred_username == post.username &&
+                                    { this.state.userAttributes.preferred_username === post.username && <>
                                     <button className="btn btn-danger btn-sm float-end" onClick={() => this.handleDeletePost(post.id)}>delete</button>
+                                    <button className="btn btn-info btn-sm float-end" data-bs-toggle="modal" data-bs-target="#updatePostModal" onClick={() => this.setPostToUpdate(post.id, post.content)}>edit</button>
+                                    </>
                                     }
                                 </div>
                             </div>
@@ -134,7 +154,7 @@ class Dashboard extends Component {
                         
                         <div className="mb-3">
                             <label htmlFor="postText" className="form-label">Say Something...</label>
-                            <input type="text" value={this.state.newPostContent} onChange={this.handleChange} className="form-control" id="postText"/>
+                            <input type="text" value={this.state.newPostContent} onChange={this.handleChange} className="form-control" id="newPostText"/>
                         </div>
                         
                     </div>
@@ -146,10 +166,32 @@ class Dashboard extends Component {
                 </form>
                 </div>
                 </div>
+                {/* Update Post Modal */}
+                <div className="modal fade" id="updatePostModal" tabIndex="-1" aria-labelledby="updatePostModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-lg">
+                <form onSubmit={this.handleUpdatePost}>
+                    <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="updatePostModalHeader">Update Post</h5>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div className="modal-body">
+                        <div className="mb-3">
+                            <label htmlFor="postText" className="form-label">New post content...</label>
+                            <input type="text" value={this.state.updatedPostContent} onChange={this.handleEditChange} className="form-control" id="updatedPostText"/>
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" className="btn btn-primary">Edit</button>
+                    </div>
+                    </div>
+                </form>
+                </div>
+                </div>
             { this.state.navToHomepageBool &&
                 <Navigate to="../" />
             }
-            
             </>
         )
     }
