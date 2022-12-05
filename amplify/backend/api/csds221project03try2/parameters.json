@@ -1,5 +1,11 @@
 {
   "AppSyncApiName": "csds221project03try2",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
-  "DynamoDBEnableServerSideEncryption": false
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authcsds221project03try2",
+      "Outputs.UserPoolId"
+    ]
+  }
 }
