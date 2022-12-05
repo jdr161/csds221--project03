@@ -8,7 +8,7 @@ const Homepage = () => {
   return (
     <>
       
-      <Authenticator>
+      <Authenticator variation="modal">
           {() => (
             <main>
               <Navigate to="/dashboard" />
